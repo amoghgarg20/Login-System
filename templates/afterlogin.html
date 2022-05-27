@@ -1,0 +1,20 @@
+<!-- After-login page template  -->
+{% extends "navbar.html" %}
+
+{% block content %}
+<!-- Block for displaying user's account details after successful login -->
+<div class="card" style="width: 60rem;margin-left: auto;margin-right: auto;">
+    <img style="display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVKTCvhbnqwyIbeN8eZAzlzb9s9d6LBnNWsw&usqp=CAU" alt="Image">
+    <div class="card-body">
+      <h3 style="padding: 10px;"class="center" ><b>Welcome {{ session['user']['name'] }} !</b></h3>
+      <h3 style="padding: 5px;"class="center" >Your Account Details</h3>
+      <p class="card-text"><strong>ID:</strong> {{ session['user']['_id'] }}<br>
+        <strong>Name:</strong> {{ session['user']['name'] }}<br>
+        <strong>Email:</strong> {{ session['user']['email'] }}</p>
+    </div>
+  </div>
+  
+{% endblock %}

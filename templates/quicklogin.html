@@ -1,0 +1,157 @@
+<!-- Quick-Login Page -->
+{% extends "navbar.html" %}
+
+{% block content %}
+    <!-- Loader -->
+    <div id="loader2" style="display:none; position:absolute; top:30%; left:40%; z-index:10">
+        <img src="/static/images/loader.gif" alt="" srcset="">
+    </div>
+
+    <div style="margin-left: auto;margin-right: auto;width:fit-content;" class="card" id="signFormcard">
+
+        <h1 class="center">Quick-Login</h1>
+        <!-- Input-Form -->
+        <form name="login_recog_form" id="myForm3">
+            <div class="card" style="width:fit-content; background-color: #0000001a;margin-left: auto;margin-right: auto;">
+                <!-- Webcam Component -->
+                <div class="modal-body">
+                    <div class="webbtn" style="display: flex; padding-left: 24%;"><span class="click" id="start" style="margin-left: -7%; margin-right: 8%;" onclick="startVideo()">Start video</span><h4 style="margin-right: 13%; color: cadetblue;">SMILE !!!</h4><span class="click" id="stop" onclick="stopVideo()">Stop video</span></div>
+                    <div style="display: inline-flex; padding-top: 2%;" class="contentarea">
+                        <div class="camera">
+                            <video id="video">Video stream not available.</video>
+                            <button id="startbutton">Take photo</button>
+                        </div>
+                        <canvas id="canvas"></canvas>
+                        <div class="output">
+                            <img id="photo" alt="The screen capture will appear in this box.">
+                        </div>
+                    </div>  
+                </div>
+            <!-- Division for instructions -->
+            </div>  
+            <div class="card click" style="width:fit-content;font-size:smaller;margin: 1px;margin-left: auto;margin-right: auto;background-color: #0000001a;">
+                <p>1. Please sit in a place which is adequately illuminated by light.</p>
+                <p>2. Remove spectacles/sunglasses (if you are wearing any).</p>
+                <p>3. Ensure that your face is properly captured by the camera.</p>
+                <p>4. "Capture Face" is only for adjusting the camera, your photo will be taken again on clicking on login.</p>
+            </div>  
+            <!-- Paragraph for displaying error-message -->
+            <p id="er2" class="error error--hidden"></p>
+            <!-- Submit-button -->
+            <input style="background-color: cadetblue;" type="submit" value="Login" class="btn">
+            <!-- Redirect to signup if not registered yet -->
+            <p class="middle"> Not registered yet? <a style="color: cadetblue;" href="/user/signup">Signup</a></p>
+        </form>
+    </div>
+
+<!-- Javascript for webcam-component -->
+<script>
+        // Stop the video
+        stopVideo = ()=>{
+            var videoEl = document.getElementById('video');
+            stream = videoEl.srcObject;
+            tracks = stream.getTracks();
+            tracks.forEach(function (track) {
+                track.stop();
+            });
+            videoEl.srcObject = null;
+        };
+
+        // Photo is scaled to this dimension
+        var width = 320; 
+        var height = 0; 
+
+        var streaming = false;
+        var video = null;
+        var canvas = null;
+        var photo = null;
+        var startbutton = null;
+
+        // Start the Webcam
+        function startup() {
+            video = document.getElementById('video');
+            canvas = document.getElementById('canvas');
+            photo = document.getElementById('photo');
+            startbutton = document.getElementById('startbutton');
+
+            navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false
+                })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function(err) {
+                    console.log("An error occurred: " + err);
+                });
+
+            video.addEventListener('canplay', function(ev) {
+                if (!streaming) {
+                    height = video.videoHeight / (video.videoWidth / width);
+
+                    if (isNaN(height)) {
+                        height = width / (4 / 3);
+                    }
+
+                    video.setAttribute('width', width);
+                    video.setAttribute('height', height);
+                    canvas.setAttribute('width', width);
+                    canvas.setAttribute('height', height);
+                    streaming = true;
+                }
+            }, false);
+
+            startbutton.addEventListener('click', function(ev) {
+                takepicture();
+                ev.preventDefault();
+            }, false);
+
+            clearphoto();
+        }
+
+        // Clears the photograph
+        function clearphoto() {
+            var context = canvas.getContext('2d');
+            context.fillStyle = "#AAA";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            var data = canvas.toDataURL('image/png');
+            photo.setAttribute('src', data);
+        }
+
+        // Clicks the picture
+        function takepicture() {
+            var context = canvas.getContext('2d');
+            if (width && height) {
+                canvas.width = width;
+                canvas.height = height;
+                context.drawImage(video, 0, 0, width, height);
+
+                var data = canvas.toDataURL('image/png');
+                photo.setAttribute('src', data);
+
+                const img = data;
+                const img2 = img.replace(/^data:image\/(png|jpg);base64,/, '');
+                data = { data: img2 }
+                return img
+
+            } 
+            else{
+                clearphoto();
+            }
+        }
+
+        window.addEventListener('load', startup, false);
+
+        // Turns-on the webcam
+        startVideo = ()=>{
+            startup();
+            
+        }
+
+</script>
+
+
+{% endblock %}
+

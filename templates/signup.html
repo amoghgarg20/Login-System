@@ -1,0 +1,184 @@
+<!-- Signup Page -->
+{% extends "navbar.html" %}
+
+{% block content %}
+    <!-- Loader -->
+    <div id="loader2" style="display:none; position:absolute; top:30%; left:40%; z-index:10">
+        <img src="/static/images/loader.gif" alt="" srcset="">
+    </div>
+    <!-- Division for contents -->
+    <div style="margin-left: auto;margin-right: auto; width: 60%;" class="card" id="signFormcard">
+
+        <h1 class="center">Create Account</h1>
+        <!-- Form -->
+        <form name="signup_form" id="myForm">
+
+            <label for="name">Name</label>
+            <input placeholder="Full Name" type="text" name="name" class="field" required>
+
+            <label for="email">Email</label>
+            <input placeholder="Email-ID" type="email" name="email" class="field" required>
+
+            <label for="password">Password</label>
+            <input placeholder="Password" type="password" name="password" class="field" required>
+            <p id="er" class="error error--hidden"></p>
+            <!-- Webcam-component -->
+            <div onclick=openFun();  class="card click" style="width:fit-content; margin-left: auto;margin-right: auto; margin-top: 15px; margin-bottom: 10px; color: white;background-color: cadetblue;">
+                <span class="button" id="openframe" >Capture Face</span>
+            </div>
+            <!-- Division for displaying instructions -->
+            <div class="card click" style="width:fit-content;font-size:smaller;margin: 1px;margin-left: auto;margin-right: auto;background-color: #0000001a;">
+                <p>1. Please sit in a place which is adequately illuminated by light.</p>
+                <p>2. Remove spectacles/sunglasses (if you are wearing any).</p>
+                <p>3. Ensure that your face is properly captured by the camera.</p>
+                <p>4. "Capture Face" is only for adjusting the camera, your photo will be taken again on clicking on signup.</p>
+            </div>
+            <!-- Signup button -->
+            <input style="background-color: cadetblue;" type="submit" value="Signup" class="btn">
+            <!-- Redirect to login page -->
+            <p class="middle"> Already have an account? <a style="color: cadetblue;" href="/user/login-recog"> Login </a> </p>
+        </form>
+    </div>
+
+<!-- Webcam-Component -->
+<div class="popupform" id='pop'>  
+    <div id="my-form" class="modal">   
+        <div class="modal-dialog">   
+            <div class="modal-content">
+                <div style="margin: 0 10px;">
+                    <div class="modal-body">
+                        <span id="closeX" onclick=closeFun();>&times;</span>
+                        <div style="display: flex; padding-left: 24%;"><button id="start" style="margin-left: -7%; margin-right: 8%;" onclick="startVideo()">Turn-On Camera</button><h4 style="margin-right: 13%;color: cadetblue;">SMILE !!!</h4><button id="stop" onclick="stopVideo()">Turn-Off Camera</button></div>
+                        <div style="display: inline-flex; padding-top: 2%;" class="contentarea">
+                            <div class="camera">
+                                <video id="video">Video stream not available.</video>
+                                <button id="startbutton">Take Photo</button>
+                            </div>
+                            <canvas id="canvas"></canvas>
+                            <div class="output">
+                                <img id="photo" alt="The screen capture will appear in this box.">
+                            </div>
+                        </div>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- JavaScript for webcam component -->
+ <script>
+        const openFun = function () {
+                document.getElementById("my-form").style.display = "block";
+            };
+        const closeFun = function(){
+                document.getElementById("my-form").style.display = "none";
+            };  
+
+        // Turns-off the webcam
+        stopVideo = ()=>{
+            var videoEl = document.getElementById('video');
+            stream = videoEl.srcObject;
+            tracks = stream.getTracks();
+            tracks.forEach(function (track) {
+                track.stop();
+            });
+            videoEl.srcObject = null;
+        };
+        // Photo is scaled to this dimension
+        var width = 320; 
+        var height = 0; 
+
+        var streaming = false;
+        var video = null;
+        var canvas = null;
+        var photo = null;
+        var startbutton = null;
+
+        // Turns-on the webcam
+        function startup() {
+            video = document.getElementById('video');
+            canvas = document.getElementById('canvas');
+            photo = document.getElementById('photo');
+            startbutton = document.getElementById('startbutton');
+
+            navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false
+                })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function(err) {
+                    console.log("An error occurred: " + err);
+                });
+
+            video.addEventListener('canplay', function(ev) {
+                if (!streaming) {
+                    height = video.videoHeight / (video.videoWidth / width);
+
+                    if (isNaN(height)) {
+                        height = width / (4 / 3);
+                    }
+
+                    video.setAttribute('width', width);
+                    video.setAttribute('height', height);
+                    canvas.setAttribute('width', width);
+                    canvas.setAttribute('height', height);
+                    streaming = true;
+                }
+            }, false);
+
+            startbutton.addEventListener('click', function(ev) {
+                takepicture();
+                ev.preventDefault();
+            }, false);
+
+            clearphoto();
+        }
+
+        // Clears the photo
+        function clearphoto() {
+            var context = canvas.getContext('2d');
+            context.fillStyle = "#AAA";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            var data = canvas.toDataURL('image/png');
+            photo.setAttribute('src', data);
+        }
+
+        // Clicks the photograph
+        function takepicture() {
+            var context = canvas.getContext('2d');
+            if (width && height) {
+                canvas.width = width;
+                canvas.height = height;
+                context.drawImage(video, 0, 0, width, height);
+
+                var data = canvas.toDataURL('image/png');
+
+                photo.setAttribute('src', data);
+
+                const img = data;
+                const img2 = img.replace(/^data:image\/(png|jpg);base64,/, '');
+                data = { data: img2 }
+                return img
+
+            } 
+            else{
+                clearphoto();
+            }
+        }
+
+        window.addEventListener('load', startup, false);
+
+        // Turns-on the video
+        startVideo = ()=>{
+            startup();
+            
+        }
+
+</script>
+
+
+{% endblock %}
