@@ -12,7 +12,7 @@ app.secret_key = '192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bc
 
 # Connecting with Mogodb(Database)
 # MongoDB URI
-mongoURI ='mongodb+srv://amoghgarg9:vasu20@cluster0.dm6fi.mongodb.net/?retryWrites=true&w=majority'
+mongoURI =''
 client = pymongo.MongoClient(mongoURI)
 database = client.get_database('flask_user_data1')
 db = database.flask_user_login_data
