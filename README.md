@@ -13,7 +13,7 @@
   2. Login: The user can login to his/her account directly just by allowing the website to take his/her photo.
   3. Logout: Users can end the session by clicking on logout button.
   4. All the images of the users are not stored in the database, only encodings generated from image are stored in binary-file. 
-  <br><b>NOTE: Only the most recent photograph of the most recent user is stored in the project’s working directory under the folder name "Uploads" for the purpose of uploading it to the server. Apart from this no image is stored.</b>
+  <br><b>NOTE: Only the most recent photograph of the most recent user is stored in the project’s working directory under the folder name "uploads/users_signup" for the purpose of uploading it to the server. Apart from this no image is stored.</b>
 
 FAQ: Why is there a need to enter password during signup if authentication will be based on face-recognition?
 <br>
@@ -29,10 +29,9 @@ Ans. Entering password can be made optional in future in case a user doesn’t w
   1. Install Python version 3.10.0 on your system.
   2. Clone this repository.
   3. Open the project folder in text-editor.
-  4. Install the libraries and dependencies using the following command<br>
-      #### "pip install -r requirements.txt" 
-     <br>Or you can install the libraries separately.
-  5. After installing the libraries, start the server by typing the following in the terminal<br>
+  4. Install the libraries and dependencies listed in requirements.txt by using "pip install" command.
+  5. In app.py enter the MongoDB URI (given in special instructions) to connect to the datatbase.
+  6. After installing the libraries, start the server by typing the following in the terminal<br>
       #### "python start.py" 
-  6. Load http://localhost:5000/ on web-browser of your choice to open the website.
+  7. Load http://localhost:5000/ on web-browser of your choice to open the website.
   
