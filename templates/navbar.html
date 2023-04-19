@@ -1,53 +1,72 @@
 <!-- Navigation-Bar -->
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
     <title>Login System</title>
     <!-- Importing Bootstrap stylesheets -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
     <!-- Specific Stylesheet -->
-    <link rel="stylesheet" href="/static/css/style.css">
-
-</head>
-<body>
-  <!-- Header -->
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <!-- Header -->
     <header>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <!-- Website logo and name -->
-                <a class="navbar-brand" href="#"><span><img src="/static/images/logo.png" style="width: 30px;height: 30px;"/><b>LOGIN-SYSTEM</b></span></a>
-              </div>
-              <ul class="nav navbar-nav navbar">
-                <li><a href="/">Home</a></li>
-              </ul>
-              <!-- Navbar content when user is logged-in -->
-              {% if session %}
-              <ul class="nav navbar-nav navbar-right">
-                <li><a href="/user/logout"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
-              </ul>
-              <!-- Navbar content when user is not logged-in -->
-              {% else %}
-              <ul class="nav navbar-nav navbar-right">
-                <li><a href="/user/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a href="/user/login-recog"><span class="glyphicon glyphicon-check"></span> Quick-Login</a></li>
-              </ul>
-              {% endif %}
-            </div>
-          </nav>
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <!-- Website logo and name -->
+            <a class="navbar-brand" href="#"
+              ><span
+                ><img
+                  src="/static/images/logo.png"
+                  style="width: 30px; height: 30px"
+                /><b>SMART LOGIN SYSTEM</b></span
+              ></a
+            >
+          </div>
+          <ul class="nav navbar-nav navbar">
+            <li><a href="/">Home</a></li>
+          </ul>
+          <!-- Navbar content when user is logged-in -->
+          {% if session %}
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/user/logout"
+                ><span class="glyphicon glyphicon-user"></span> Logout</a
+              >
+            </li>
+          </ul>
+          <!-- Navbar content when user is not logged-in -->
+          {% else %}
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/user/signup"
+                ><span class="glyphicon glyphicon-user"></span> Sign Up</a
+              >
+            </li>
+            <li>
+              <a href="/user/login-recog"
+                ><span class="glyphicon glyphicon-check"></span> Quick-Login</a
+              >
+            </li>
+          </ul>
+          {% endif %}
+        </div>
+      </nav>
     </header>
 
-    {% block content %}
-
-    {% endblock %}
+    {% block content %} {% endblock %}
     <!-- JavaScripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="/static/js/jquery.js"></script>
     <script src="/static/js/scripts.js"></script>
-</body>
+  </body>
 </html>
